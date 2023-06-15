@@ -1,0 +1,5 @@
+package com.RailwayReservationBookingService.repository;
+
+public interface PassengerRepository {
+
+}

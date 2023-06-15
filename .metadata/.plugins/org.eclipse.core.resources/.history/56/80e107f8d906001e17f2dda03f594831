@@ -1,0 +1,5 @@
+package com.RailwayReservationPaymentService.model;
+
+public class Passengers {
+
+}

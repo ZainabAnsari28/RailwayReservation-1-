@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="de.codecentric.boot.admin.server.config.EnableAdminServer"/>
+    <fullyQualifiedTypeName name="org.springframework.context.annotation.Configuration"/>
+    <fullyQualifiedTypeName name="de.codecentric.boot.admin.server.config.AdminServerProperties"/>
+    <fullyQualifiedTypeName name="org.springframework.security.config.annotation.web.builders.HttpSecurity"/>
+    <fullyQualifiedTypeName name="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler"/>
+    <fullyQualifiedTypeName name="org.springframework.security.web.csrf.CookieCsrfTokenRepository"/>
+    <fullyQualifiedTypeName name="javax.persistence.Column"/>
+    <fullyQualifiedTypeName name="javax.persistence.Entity"/>
+    <fullyQualifiedTypeName name="javax.persistence.Table"/>
+    <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.JpaRepository"/>
+    <fullyQualifiedTypeName name="com.RailwayReservationAdminManagement.model.AdminModel"/>
+    <fullyQualifiedTypeName name="com.RailwayReservationAdminManagement.repository.AdminLoginRepository"/>
+</qualifiedTypeNameHistroy>

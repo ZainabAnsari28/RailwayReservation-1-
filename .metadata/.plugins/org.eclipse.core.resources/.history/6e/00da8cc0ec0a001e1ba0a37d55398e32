@@ -1,0 +1,5 @@
+package com.RailwayReservationAdminManagement.service;
+
+public class AdminLoginDatabaseLoader {
+
+}

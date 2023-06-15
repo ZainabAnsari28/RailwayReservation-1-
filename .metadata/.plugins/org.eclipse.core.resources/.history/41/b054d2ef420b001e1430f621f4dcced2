@@ -1,0 +1,27 @@
+package com.RailwayReservationAdminManagement.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import com.RailwayReservationAdminManagement.model.AdminModel;
+import com.RailwayReservationAdminManagement.repository.AdminLoginRepository;
+import com.RailwayReservationAdminManagement.security.CustomAdminDetails;
+
+public class CustomAdminDetailsService implements UserDetailsService {
+	
+	@Autowired 
+	private AdminLoginRepository repo;
+	 
+    @Override
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        AdminModel admin = repo.findByName(userName);
+        if (admin == null) {
+            throw new UsernameNotFoundException("No user found with the given email");
+        }
+         
+        return new CustomAdminDetails(admin);
+    }
+
+}

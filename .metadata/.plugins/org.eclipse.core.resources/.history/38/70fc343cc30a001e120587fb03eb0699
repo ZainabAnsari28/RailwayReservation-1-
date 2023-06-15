@@ -1,0 +1,5 @@
+package com.RailwayReservationAdminManagement.model;
+
+public class Admin {
+
+}

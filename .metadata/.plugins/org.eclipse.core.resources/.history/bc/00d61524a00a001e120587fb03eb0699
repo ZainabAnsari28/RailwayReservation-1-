@@ -1,0 +1,21 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+spring:
+  boot:
+    admin:
+      client:
+        url: [http://localhost:8080]
+  application:
+    name: Admin Service
+    
+
+  security:
+    user:
+      name: "admin"
+      password: "admin123"

@@ -1,0 +1,5 @@
+package com.RailwayReservationAdminManagement.repository;
+
+public interface AdminLoginRepository {
+
+}

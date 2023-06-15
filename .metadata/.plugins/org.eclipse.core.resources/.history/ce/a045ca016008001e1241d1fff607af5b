@@ -1,0 +1,173 @@
+package com.RailwayReservationBookingService.service;
+
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.persistence.EntityManager;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.RailwayReservationBookingService.exception.ResourceNotFoundException;
+
+import com.RailwayReservationBookingService.model.Passengers;
+import com.RailwayReservationBookingService.model.UserDetails;
+import com.RailwayReservationBookingService.repository.BookingRepository;
+import com.RailwayReservationBookingService.repository.PassengerRepository;
+import com.google.common.collect.Lists;
+
+import it.ozimov.springboot.mail.model.defaultimpl.DefaultEmail;
+import it.ozimov.springboot.mail.model.Email;
+import it.ozimov.springboot.mail.service.EmailService;
+
+@Transactional
+@Service
+public class BookingServiceImpl implements BookingService {
+
+	int id;
+	@Autowired
+	public EmailService emailService;
+	
+//	@Autowired
+//	private EntityManager entityManager;
+
+	@Autowired
+	private BookingRepository bookingRepository;
+   
+	@Autowired
+	private PassengerRepository passengerRepository;
+
+	@Override
+	public List<UserDetails> getAll() {
+		List<UserDetails> userDetails = new ArrayList<UserDetails>();
+		bookingRepository.findAll().forEach(userDetails1 -> userDetails.add(userDetails1));
+		System.out.println(userDetails+"User Details");
+		return userDetails;
+	}
+
+	@Override
+	public UserDetails getUserDetailsById(long pnrNo) {
+		List<UserDetails> userDetails = bookingRepository.findAll();
+		for (UserDetails x : userDetails) {
+			if (x.getPnrNo() == pnrNo) {
+				id = x.getId();
+			}
+		}
+		return bookingRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("No ticket is booked with PNR Number : " + pnrNo));
+	}
+	@Transactional
+	@Override
+	public UserDetails addUserBookingDetails(UserDetails userDetails) {
+		userDetails=bookingRepository.save(userDetails);
+
+//		try {
+//			sendEmail(userDetails.getPnrNo());
+//		} catch (AddressException e) {
+//			e.printStackTrace();
+//		}
+		return userDetails;
+
+	}
+	
+	@Override
+	public String addPassengersDetails(Passengers passengerDetails) {
+		passengerRepository.save(passengerDetails);
+		return ("a");
+	}
+
+	@Override
+	public String cancelUserBookingDetails(long pnrNo) {
+		String msg = ("Your booking ticket with PNR Number : " + pnrNo + " is cancelled. "
+				+ "Your payment amount will be credited to your account within 5 to 7 days..!!!");
+		List<UserDetails> userDetails = bookingRepository.findAll();
+		for (UserDetails x : userDetails) {
+			if (x.getPnrNo() == pnrNo ) {
+				System.out.println(x.getBookingStatus()+"Booking Status");
+				id = x.getId();
+				
+			}
+		}
+		UserDetails existingDetails = bookingRepository.findById(id).orElseThrow(
+				() -> new ResourceNotFoundException("Cannot delete as booking is not done with PNR Number : " + pnrNo));
+		bookingRepository.save(existingDetails);
+//		try {
+//			sendEmails(pnrNo);
+//		} catch (AddressException e) {
+//			e.printStackTrace();
+//		}
+		return msg;
+	}
+
+	public void updateUserBookingtDetails(long pnrNo) {
+		List<UserDetails> userDetails = bookingRepository.findAll();
+		for (UserDetails x : userDetails) {
+			if (x.getPnrNo() == pnrNo) {
+				x.setBookingStatus("Cancelled");
+				x.setPayment("refund issued");
+				bookingRepository.save(x);
+			}
+		}
+	}
+	
+//	public int getSequenceNumber(String sequenceName) {
+//	
+//		    try {
+//		        entityManager.getTransaction().begin();
+//
+//		        // Retrieve the current sequence number
+//		        DatabaseSequence counter = entityManager.find(DatabaseSequence.class, sequenceName);
+//
+//		        if (counter == null) {
+//		            // If the sequence does not exist, create a new entry
+//		            counter = new DatabaseSequence();
+//		            counter.setId(sequenceName);
+//		            counter.setSeq(1);
+//		            entityManager.persist(counter);
+//		        } else {
+//		            // Increment the sequence number
+//		            counter.setSeq(counter.getSeq() + 1);
+//		            entityManager.merge(counter);
+//		        }
+//
+//		        entityManager.getTransaction().commit();
+//		        return counter.getSeq();
+//		    } catch (Exception e) {
+//		        // Handle any potential exceptions
+//		        entityManager.getTransaction().rollback();
+//		        e.printStackTrace();
+//		        return -1;
+//		    }
+//		}
+
+
+//	/** To Send An Email After Booking Of A Train Ticket **/
+//	public void sendEmail(long pnrNo) throws AddressException {
+//		String data1 = "Your train ticket booking is successful..!!";
+//		String data2 = "Please Check the details....!!!!!!";
+//		UserDetails userDet = getUserDetailsById(pnrNo);
+//		final Email email = DefaultEmail.builder().from(new InternetAddress("shreya7sdl@gmail.com"))
+//				.replyTo(new InternetAddress("shreya7sdl@gmail.com"))
+//				.to(Lists.newArrayList(new InternetAddress("shreya7sdl@gmail.com")))
+//				.subject("Your ticket is booked").body(data1 + "\n" + data2 + "\n" + userDet).encoding("UTF-8").build();
+//		emailService.send(email);
+//	}
+//
+//
+//	/** For Email Notification After Cancelled Payment **/
+//	public void sendEmails(long pnrNo) throws AddressException {
+//		final Email email = DefaultEmail.builder().from(new InternetAddress("shreya7sdl@gmail.com"))
+//				.replyTo(new InternetAddress("shreya7sdl@gmail.com"))
+//				.to(Lists.newArrayList(new InternetAddress("shreya7sdl@gmail.com")))
+//				.subject("Your ticket is Cancelled")
+//				.body("Your booking ticket with PNR Number : " + pnrNo + " is cancelled. "
+//						+ "Your payment amount will be credited to your account within 5 to 7 days..!!!")
+//				.encoding("UTF-8").build();
+//		emailService.send(email);
+//	}
+//	
+}

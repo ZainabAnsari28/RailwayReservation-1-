@@ -1,0 +1,12 @@
+package com.RailwayReservationAdminManagement.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.RailwayReservationAdminManagement.model.AdminModel;
+
+@Repository
+public interface AdminLoginRepository extends JpaRepository<AdminModel, Integer> {
+	
+    public AdminModel findByName(String UserName); 
+}
